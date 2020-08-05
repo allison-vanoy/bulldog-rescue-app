@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import Loading from './LoadingComponent';
 
 const mapStateToProps = state => {
 	return {
@@ -49,7 +50,20 @@ class DogInfo extends Component {
 
 	render() {
 		const dogId = this.props.navigation.getParam('dogId');
-        const dog = this.props.dogs.dogs.filter(dog => dog.id === dogId)[0];
+		const dog = this.props.dogs.dogs.filter(dog => dog.id === dogId)[0];
+		
+		if (this.props.dogs.isLoading) {
+			return (
+				<Loading />
+			);
+		};
+
+		if (this.props.dogs.errMess) {
+			return (
+				<Text>{this.props.dogs.errMess}</Text>
+			)
+		}
+
 		return (
 			<RenderDog 
 				dog={dog} 
