@@ -38,3 +38,12 @@ export const addDogs = dogs => ({
 	type: ActionTypes.ADD_DOGS,
 	payload: dogs
 });
+
+export const postFavorite = dogId => dispatch => {
+	dispatch(addFavorite(dogId));
+};
+
+export const addFavorite = dogId => ({
+	type: ActionTypes.ADD_FAVORITE,
+	payload: dogId
+});

@@ -4,11 +4,17 @@ import { Card, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
+import { postFavorite } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
 	return {
-		dogs: state.dogs
+		dogs: state.dogs,
+		favorites: state.favorites
 	};
+};
+
+const mapDispatchToProps = {
+	postFavorite
 };
 
 function RenderDog(props) {
@@ -36,16 +42,8 @@ function RenderDog(props) {
 
 class DogInfo extends Component {
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			favorite: false
-		}
-	};
-
-	markFavorite() {
-		this.setState({ favorite: true })
+	markFavorite(dogId) {
+		this.props.postFavorite(dogId);
 	}
 
 	render() {
@@ -67,11 +65,11 @@ class DogInfo extends Component {
 		return (
 			<RenderDog 
 				dog={dog} 
-				favorite={this.state.favorite} 
-				markFavorite={() => this.markFavorite()}
+				favorite={this.props.favorites.includes(dogId)} 
+				markFavorite={() => this.markFavorite(dogId)}
 			/>
 		);
 	}
 }
 
-export default connect(mapStateToProps)(DogInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(DogInfo);
