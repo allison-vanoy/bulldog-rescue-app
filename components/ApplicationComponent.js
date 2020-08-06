@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Button, TextInput } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Button, Modal } from 'react-native';
 import { Input } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 
@@ -14,20 +14,29 @@ class Application extends Component {
 			phone: '',
 			email: '',
 			dogName: '',
-			adoptDate: ''
+			adoptDate: '',
+			showModal: false
 		}
+	}
+
+	toggleModal() {
+		this.setState({showModal: !this.state.showModal})
 	}
 
 	handleSubmit() {
 		console.log(JSON.stringify(this.state));
+		this.toggleModal();
+	}
 
+	resetForm() {
 		this.setState({
 			firstName: '',
 			lastName: '',
 			phone: '',
 			email: '',
 			dogName: '',
-			adoptDate: ''
+			adoptDate: '',
+			showModal: false
 		});
 	}
 
@@ -61,7 +70,7 @@ class Application extends Component {
 				</View>
 				<View style={styles.inputRow}>
 					<Input
-						placeholder='pjone number'
+						placeholder='phone number'
 						onChangeText={value => this.setState({phone: value})}
 						value={this.state.phone}
 					/>
@@ -125,6 +134,24 @@ class Application extends Component {
 						color='#F9B5AC'
 					/>
 				</View>
+				<Modal
+					animationType={'slide'}
+					transparent={false}
+					visible={this.state.showModal}
+					onRequestClose={() => this.toggleModal()}>
+					<View style={styles.modal}>
+						<Text style={styles.modalTitle}>Thank you for your application!</Text>
+						<Text style={styles.modalText}>You will receive an email shortly confirming your submission.</Text>
+						<Button
+							onPress={() => {
+								this.toggleModal();
+								this.resetForm();
+							}}
+							color='#F9B5AC'
+							title='Close'
+						/>
+					</View>
+				</Modal>
 			</ScrollView>
 		);
 	}
@@ -145,7 +172,22 @@ const styles = StyleSheet.create({
 	formLabel: {
 		fontSize: 12,
 		flex: 2
+	},
+	modal: {
+		justifyContent: 'center',
+		margin: 20
+	},
+	modalTitle: {
+		fontSize: 24,
+		fontWeight: 'bold',
+		textAlign: 'center',
+		marginBottom: 20
+	},
+	modalText: {
+		fontSize: 18,
+		margin: 10,
+		marginBottom: 20
 	}
-})
+});
 
 export default Application;
