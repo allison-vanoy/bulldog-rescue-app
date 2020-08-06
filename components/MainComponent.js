@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Home from './HomeComponent';
 import Directory from './DirectoryComponent';
 import DogInfo from './DogInfoComponent';
+import Application from './ApplicationComponent';
 import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
@@ -41,6 +42,29 @@ const DirectoryNavigator = createStackNavigator(
 	}
 );
 
+const ApplicationNavigator = createStackNavigator(
+	{
+		Contact: { screen: Application }
+	},
+	{
+		navigationOptions: ({navigation}) => ({
+			headerTitle: 'Bulldog Rescue',
+			headerStyle: {
+				backgroundColor: '#75B9BE' 
+			},
+			headerTitleStyle: {
+				color: '#FFFFFF'
+			},
+			headerLeft: <Icon
+				name='list'
+				type='font-awesome'
+				iconStyle={styles.stackIcon}
+				onPress={() => navigation.toggleDrawer()}
+			/>
+		})
+	}
+);
+
 const HomeNavigator = createStackNavigator(
 	{
 		Home: { screen: Home}
@@ -67,7 +91,8 @@ const HomeNavigator = createStackNavigator(
 const MainNavigator = createDrawerNavigator(
 	{
 		Home: { screen: HomeNavigator },
-		Directory: { screen: DirectoryNavigator }
+		Directory: { screen: DirectoryNavigator },
+		Application: { screen: ApplicationNavigator }
 	},
 	{
 		drawerBackgroundColor: '#75B9BE'
