@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Button, Modal } from 'react-native';
-import { Input } from 'react-native-elements';
+import { Text, View, ScrollView, StyleSheet, Picker, Modal } from 'react-native';
+import { Input, Button } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 
 class Application extends Component {
@@ -131,7 +131,8 @@ class Application extends Component {
 					<Button
 						onPress={() => this.handleSubmit()}
 						title='Submit Application'
-						color='#F9B5AC'
+						buttonStyle={styles.submitButton}
+						titleStyle={styles.submitButtonText}
 					/>
 				</View>
 				<Modal
@@ -187,7 +188,23 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		margin: 10,
 		marginBottom: 20
-	}
+	},
+	submitButton: {
+		width: 250,
+		height: 35,
+		backgroundColor: '#F9B5AC',
+		borderWidth: 1,
+		borderColor: '#F9B5AC',
+		borderRadius: 25,
+		marginTop: 20
+	},
+	submitButtonText: {
+		fontSize: 18,
+		fontFamily: 'Roboto',
+		textShadowColor: 'rgba(235, 87, 87, 0.5)',
+		textShadowOffset: {width: 1, height: 2},
+		textShadowRadius: 1
+	},
 });
 
 export default Application;
