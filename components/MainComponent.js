@@ -5,7 +5,7 @@ import DogInfo from './DogInfoComponent';
 import Application from './ApplicationComponent';
 import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
-import { Icon } from 'react-native-elements';
+import { Icon, registerCustomIconType } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchDogs } from '../redux/ActionCreators';
 
@@ -149,7 +149,15 @@ const MainNavigator = createDrawerNavigator(
 		Application: { screen: ApplicationNavigator }
 	},
 	{
-		drawerBackgroundColor: '#75B9BE'
+		drawerBackgroundColor: '#75B9BE',
+		contentOptions: {
+			labelStyle: {
+				color: '#fff',
+				fontFamily: 'sans-serif-condensed',
+				fontSize: 18,
+				fontWeight: '300'
+			}
+		}
 	}
 );
 

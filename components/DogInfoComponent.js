@@ -22,7 +22,7 @@ function RenderDog(props) {
 
 	if (dog) {
 		return (
-			<View>
+			<ScrollView>
 				<Text style={styles.pageHeader}>{dog.name}</Text>
 
 				{/* large primary image container */}
@@ -47,7 +47,7 @@ function RenderDog(props) {
 						)
 					}}
 					keyExtractor={item => Object.keys(item)}
-					style={{justifyContent: 'center', marginTop: -66}}
+					style={(dog.images.length > 4) ? {marginTop: -66} : {justifyContent: 'center', marginTop: -66}}
 				/>
 
 				{/* row with heart and notify icons and apply button */}
@@ -88,7 +88,16 @@ function RenderDog(props) {
 					<Text style={styles.pageSubHeaders}>More About Me</Text>
 					<Text>{dog.details.about}</Text>
 				</View>
-			</View>
+
+				{/* donate button */}
+				<View style={styles.donateContainer}>
+					<Button
+						title='Donate to My Care'
+						buttonStyle={styles.donateButton}
+						titleStyle={styles.donateButtonText}
+					/>
+				</View>
+			</ScrollView>
 		)
 	}
 	return <View />;
@@ -168,8 +177,8 @@ const styles = StyleSheet.create(
 			borderRightWidth: 2,
 		},
 		thumbnailImages: {
-			width: 70,
-			height: 70,
+			width: 85,
+			height: 85,
 		},
 		optionContainer: {
 			flex: 1, 
@@ -196,6 +205,28 @@ const styles = StyleSheet.create(
 			marginTop: 20,
 			marginLeft: 40,
 			marginRight: 40,
+		},
+		donateContainer: {
+			flex: 1, 
+			justifyContent: 'center', 
+			alignItems: 'center',
+			marginTop: 40,
+			marginBottom: 40
+		},
+		donateButton: {
+			width: 250,
+			height: 35,
+			backgroundColor: '#D0D6B5',
+			borderWidth: 1,
+			borderColor: '#D0D6B5',
+			borderRadius: 25,
+		},
+		donateButtonText: {
+			fontSize: 18,
+			fontFamily: 'Roboto',
+			textShadowColor: 'rgba(109, 112, 95, 0.5)',
+			textShadowOffset: {width: 1, height: 2},
+			textShadowRadius: 1
 		}
 	}
 )
