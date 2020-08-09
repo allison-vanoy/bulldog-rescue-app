@@ -40,7 +40,10 @@ const AvailableDogsNavigator = createStackNavigator(
 					onPress={() => navigation.toggleDrawer()}
 				/>,
 				headerRight: <View />
-			})
+			}),
+			cardStyle: {
+				backgroundColor: 'white'
+			}
 		},
 		DogInfo: { screen: DogInfo }
 	},
@@ -62,6 +65,9 @@ const AvailableDogsNavigator = createStackNavigator(
 				fontFamily: 'sans-serif-condensed',
 				fontWeight: '200',
 			},
+		},
+		cardStyle: {
+			backgroundColor: 'white'
 		}
 	}
 );
@@ -94,7 +100,10 @@ const ApplicationNavigator = createStackNavigator(
 				onPress={() => navigation.toggleDrawer()}
 			/>,
 			headerRight: <View />
-		})
+		}),
+		cardStyle: {
+			backgroundColor: 'white'
+		}
 	}
 );
 
@@ -126,7 +135,10 @@ const HomeNavigator = createStackNavigator(
 				onPress={() => navigation.toggleDrawer()}
 			/>,
 			headerRight: <View />
-		})
+		}),
+		cardStyle: {
+			backgroundColor: 'white'
+		}
 	}
 );
 

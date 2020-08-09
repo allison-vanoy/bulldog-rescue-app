@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, FlatList, ScrollView, Image, StyleSheet, TouchableHighlight } from 'react-native';
-import { Tile } from 'react-native-elements';
-import { Card, Icon } from 'react-native-elements';
+import { Tile, Button, Card, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
@@ -24,16 +23,20 @@ function RenderDog(props) {
 	if (dog) {
 		return (
 			<View>
+				<Text style={styles.pageHeader}>{dog.name}</Text>
+
+				{/* large primary image container */}
 				<Tile
-					style={styles.primaryImage}
 					imageSrc={ props.currentImage === '' ? {uri: baseUrl + dog.images[0]} : {uri: baseUrl + props.currentImage}}
 				/>
+
+				{/* thumbnail images container */}
 				<FlatList
 					horizontal
 					data={dog.images}
 					renderItem={({item}) => {
 						return (
-							<View>
+							<View style={styles.thumbnailContainer}>
 								<TouchableHighlight onPress={() => props.setImage(item)}>
 									<Image
 										style={styles.thumbnailImages}
@@ -44,20 +47,47 @@ function RenderDog(props) {
 						)
 					}}
 					keyExtractor={item => Object.keys(item)}
+					style={{justifyContent: 'center', marginTop: -66}}
 				/>
-				<Card
-					featuredTitle={dog.name}
-					image={{uri: baseUrl + dog.images[0]}}>
-					<Text style={{margin:10}}>
-						{dog.about}
-					</Text>
+
+				{/* row with heart and notify icons and apply button */}
+				<View style={styles.optionContainer}>
 					<Icon
 						name={props.favorite ? 'heart' : 'heart-o'}
 						type='font-awesome'
 						color='#EE7674'
+						size={38}
 						onPress={() => props.favorite ? console.log('Already a favorite') : props.markFavorite()}
 					/>
-				</Card>
+					<View>
+						<Button
+							title='Apply to Adopt'
+							buttonStyle={styles.applyButton}
+							titleStyle={styles.applyButtonText}
+						/>
+					</View>
+					<Icon
+						name={props.favorite ? 'bell' : 'bell-o'}
+						type='font-awesome'
+						color='#D0D6B5'
+						size={38}
+						onPress={() => props.favorite ? console.log('Already getting notifications') : props.markFavorite()}
+					/>
+				</View>
+
+				{/* dog details and about section */}
+				<View style={styles.detailsContainer}>
+					<Text style={styles.pageSubHeaders}>{dog.name}'s Details</Text>
+					<Text>Status:  {dog.details.status}</Text>
+					<Text>Weight:  {dog.details.weight}</Text>
+					<Text>Age:  {dog.details.age}</Text>
+					<Text>Gender:  {dog.details.gender}</Text>
+				</View>
+
+				<View style={styles.detailsContainer}>
+					<Text style={styles.pageSubHeaders}>More About Me</Text>
+					<Text>{dog.details.about}</Text>
+				</View>
 			</View>
 		)
 	}
@@ -80,9 +110,7 @@ class DogInfo extends Component {
 	}
 
 	setImage = (image) => {
-		console.log('entered');
 		this.setState({currentImage: image});
-		console.log(this.state.currentImage);
 	}
 
 	render() {
@@ -117,20 +145,57 @@ class DogInfo extends Component {
 
 const styles = StyleSheet.create(
 	{
-		thumbnailImages: {
-			width: 100,
-			height: 100,
+		pageHeader: {
+			textAlign: 'center',
+			fontSize: 22,
+			fontFamily: 'sans-serif-condensed',
+			fontWeight: '100',
+			lineHeight: 50
+		},
+		pageSubHeaders: {
+			textAlign: 'center',
+			fontSize: 20,
+			fontFamily: 'sans-serif-condensed',
+			fontWeight: '100',
+			lineHeight: 40
+		},
+		thumbnailContainer: {
 			borderColor: '#fff',
 			borderStyle: 'solid',
-			borderWidth: 5,
-			borderLeftWidth: 0,
-			margin: 0,
-			padding: 0
+			borderTopWidth: 4,
+			borderBottomWidth: 4,
+			borderLeftWidth: 2,
+			borderRightWidth: 2,
 		},
-		primaryImage: {
-			flex: 1,
-			margin: 0,
-			padding: 0
+		thumbnailImages: {
+			width: 70,
+			height: 70,
+		},
+		optionContainer: {
+			flex: 1, 
+			flexDirection: 'row', 
+			justifyContent: 'space-around',
+			marginTop: 20
+		},
+		applyButton: {
+			width: 250,
+			height: 35,
+			backgroundColor: '#F9B5AC',
+			borderWidth: 1,
+			borderColor: '#F9B5AC',
+			borderRadius: 25,
+		},
+		applyButtonText: {
+			fontSize: 18,
+			fontFamily: 'Roboto',
+			textShadowColor: 'rgba(235, 87, 87, 0.5)',
+			textShadowOffset: {width: 1, height: 2},
+			textShadowRadius: 1
+		},
+		detailsContainer: {
+			marginTop: 20,
+			marginLeft: 40,
+			marginRight: 40,
 		}
 	}
 )
