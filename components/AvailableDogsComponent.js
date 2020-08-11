@@ -43,7 +43,13 @@ class AvailableDogs extends Component {
 			<ScrollView>
 				<Text style={styles.pageHeader}>Available Dogs</Text>
 				<FlatList
-					data={this.props.dogs.dogs}
+					data={this.props.dogs.dogs.filter(dog => dog.details.status === "Available")}
+					renderItem={renderAvailableDogsItem}
+					keyExtractor={item => item.id.toString()}
+				/>
+				<Text style={styles.pageHeader}>On Hold</Text>
+				<FlatList
+					data={this.props.dogs.dogs.filter(dog => dog.details.status === "On Hold")}
 					renderItem={renderAvailableDogsItem}
 					keyExtractor={item => item.id.toString()}
 				/>

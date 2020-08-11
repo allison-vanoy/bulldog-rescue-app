@@ -61,7 +61,8 @@ function RenderDog(props) {
 					/>
 					<View>
 						<Button
-							title='Apply to Adopt'
+							title={dog.details.status === 'Available' ? 'Apply to Adopt' : 'Not Yet Available'}
+							disabled={dog.details.status === 'Available' ? false : true}
 							buttonStyle={styles.applyButton}
 							titleStyle={styles.applyButtonText}
 						/>
