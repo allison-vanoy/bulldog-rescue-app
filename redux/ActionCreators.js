@@ -47,3 +47,12 @@ export const addFavorite = dogId => ({
 	type: ActionTypes.ADD_FAVORITE,
 	payload: dogId
 });
+
+export const postNotification = dogId => dispatch => {
+	dispatch(addNotification(dogId));
+};
+
+export const addNotification = dogId => ({
+	type: ActionTypes.ADD_NOTIFICATION,
+	payload: dogId
+});

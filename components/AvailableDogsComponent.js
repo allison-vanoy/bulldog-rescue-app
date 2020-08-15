@@ -63,7 +63,7 @@ const styles = StyleSheet.create(
 		pageHeader: {
 			textAlign: 'center',
 			fontSize: 22,
-			fontFamily: 'sans-serif-condensed',
+			fontFamily: 'Roboto',
 			fontWeight: '100',
 			lineHeight: 50
 		},

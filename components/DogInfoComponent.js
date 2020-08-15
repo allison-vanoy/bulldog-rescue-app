@@ -4,17 +4,19 @@ import { Tile, Button, Card, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
-import { postFavorite } from '../redux/ActionCreators';
+import { postFavorite, postNotification } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
 	return {
 		dogs: state.dogs,
-		favorites: state.favorites
+		favorites: state.favorites,
+		notifications: state.notifications
 	};
 };
 
 const mapDispatchToProps = {
-	postFavorite
+	postFavorite,
+	postNotification
 };
 
 function RenderDog(props) {
@@ -68,11 +70,11 @@ function RenderDog(props) {
 						/>
 					</View>
 					<Icon
-						name={props.favorite ? 'bell' : 'bell-o'}
+						name={props.notifications ? 'bell' : 'bell-o'}
 						type='font-awesome'
 						color='#D0D6B5'
 						size={38}
-						onPress={() => props.favorite ? console.log('Already getting notifications') : props.markFavorite()}
+						onPress={() => props.notifications ? console.log('Already getting notifications') : props.markForNotifications()}
 					/>
 				</View>
 
@@ -114,6 +116,9 @@ class DogInfo extends Component {
 		}
 	}
 
+	markForNotifications(dogId) {
+		this.props.postNotification(dogId);
+	}
 
 	markFavorite(dogId) {
 		this.props.postFavorite(dogId);
@@ -143,8 +148,10 @@ class DogInfo extends Component {
 			<ScrollView>
 				<RenderDog 
 					dog={dog} 
-					favorite={this.props.favorites.includes(dogId)} 
+					favorite={this.props.favorites.includes(dogId)}
 					markFavorite={() => this.markFavorite(dogId)}
+					notifications={this.props.notifications.includes(dogId)}
+					markForNotifications={() => this.markForNotifications(dogId)}
 					currentImage={this.state.currentImage}
 					setImage={this.setImage}
 				/>
