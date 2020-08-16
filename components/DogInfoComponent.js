@@ -20,7 +20,7 @@ const mapDispatchToProps = {
 };
 
 function RenderDog(props) {
-	const {dog} = props;
+	const {dog, navigation} = props;
 
 	if (dog) {
 		return (
@@ -67,6 +67,7 @@ function RenderDog(props) {
 							disabled={dog.details.status === 'Available' ? false : true}
 							buttonStyle={styles.applyButton}
 							titleStyle={styles.applyButtonText}
+							onPress={() => navigation.navigate('Application')}
 						/>
 					</View>
 					<Icon
@@ -154,6 +155,7 @@ class DogInfo extends Component {
 					markForNotifications={() => this.markForNotifications(dogId)}
 					currentImage={this.state.currentImage}
 					setImage={this.setImage}
+					navigation={this.props.navigation}
 				/>
 			</ScrollView>
 		);

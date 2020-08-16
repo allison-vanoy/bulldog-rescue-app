@@ -45,7 +45,8 @@ const AvailableDogsNavigator = createStackNavigator(
 				backgroundColor: 'white'
 			}
 		},
-		DogInfo: { screen: DogInfo }
+		DogInfo: { screen: DogInfo },
+		Application: { screen: Application }
 	},
 	{
 		initialRoute: 'AvailableDogs',
