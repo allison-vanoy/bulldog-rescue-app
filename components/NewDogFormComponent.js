@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, StyleSheet, Picker, Modal } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
+import { postDog } from '../redux/ActionCreators';
+
+const mapStateToProps = state => {
+	return {
+		dogs: state.dogs
+	};
+};
+
+const mapDispatchToProps = {
+	postDog
+};
 
 class NewDog extends Component {
 
@@ -21,6 +34,7 @@ class NewDog extends Component {
 
 	handleSubmit() {
 		console.log(JSON.stringify(this.state));
+		this.props.postDog(this.state.dogName, this.state.details.status, this.state.details.weight, this.state.details.age, this.state.details.gender, this.state.details.about);
 	}
 
 	resetForm() {
@@ -37,19 +51,20 @@ class NewDog extends Component {
 	}
 
 	render() {
+		const { dog } = this.props;
+		const { navigate } = this.props.navigation;
+
 		return(
 			<ScrollView>
 				<View style={styles.labelRow}>
 					<Text style={styles.formLabel}>Dog Name</Text>
 				</View>
-				<View style={styles.labelRow}>
-					<Picker
-						style={{flex: 2, height: 20, marginLeft: 10}}
-						selectedValue={this.state.dogName}
-						onValueChange={value => this.setState({dogName: value})}>
-						<Picker.Item label='George' value='George' />
-						<Picker.Item label='Marshmallow' value='Marshmallow' />
-					</Picker>
+				<View style={styles.inputRow}>
+					<Input
+						placeholder='name'
+						onChangeText={value => this.setState({...this.state, dogName: value})}
+						value={this.state.dogName}
+					/>
 				</View>
 
 				<View style={styles.labelRow}>
@@ -114,7 +129,11 @@ class NewDog extends Component {
 				</View>
 				<View style={styles.labelRow}>
 					<Button
-						onPress={() => this.handleSubmit()}
+						onPress={() => {
+							this.handleSubmit();
+							this.resetForm();
+							navigate('AvailableDogs')
+						}}
 						title='Submit Application'
 						buttonStyle={styles.submitButton}
 						titleStyle={styles.submitButtonText}
@@ -174,4 +193,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default NewDog;
+export default connect(mapStateToProps, mapDispatchToProps)(NewDog);

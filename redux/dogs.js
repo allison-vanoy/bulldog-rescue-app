@@ -12,6 +12,10 @@ export const dogs = (state = { isLoading: true, errMess: null, dogs: [] }, actio
 		case ActionTypes.DOGS_FAILED:
 			return {...state, isLoading: false, errMess: action.payload}
 
+		case ActionTypes.ADD_DOG:
+			console.log('trying to add a new dog in the dogs reducer...')
+			return {...state, dogs: state.dogs.concat(action.payload)}
+
 		default:
 			return state;
 	}

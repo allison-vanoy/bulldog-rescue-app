@@ -39,6 +39,58 @@ export const addDogs = dogs => ({
 	payload: dogs
 });
 
+
+
+
+
+export const postDog = (name, status, weight, age, gender, about) => dispatch => {
+	const newDog = {
+		name,
+		details: {
+			status,
+			weight,
+			age,
+			gender,
+			about
+		}
+	};
+
+	return fetch(baseUrl + 'dogs', {
+			method: "POST",
+			body: JSON.stringify(newDog),
+			headers: {
+				"Content-type": "application/json"
+			}
+		})
+		.then(response => {
+			if (response.ok) {
+				return response;
+			} else {
+				const error = new Error(`Error ${response.status}: ${response.statusText}`);
+				error.response = response;
+				throw error;
+			}
+		},
+		error => { throw error; }
+	)
+	.then(response => response.json())
+	.then(response => dispatch(addDog(response)))
+	.catch(error => {
+		console.log('post dog', error.message);
+		alert(`This dog could not be submitted\nError: ${error.message}`);
+	})
+};
+
+export const addDog = dog => ({
+	type: ActionTypes.ADD_DOG,
+	payload: dog
+});
+
+
+
+
+
+
 export const postFavorite = dogId => dispatch => {
 	dispatch(addFavorite(dogId));
 };
