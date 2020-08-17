@@ -41,6 +41,17 @@ class AvailableDogs extends Component {
 
 		return (
 			<ScrollView>
+
+				{/* only display button to admin users */}
+				<View style={styles.buttonRow}>
+					<Button
+						title={'Add New Dog'}
+						buttonStyle={styles.addDogButton}
+						titleStyle={styles.addDogButtonText}
+						onPress={() => navigate('NewDog')}
+					/>
+				</View>
+
 				<Text style={styles.pageHeader}>Available Dogs</Text>
 				<FlatList
 					data={this.props.dogs.dogs.filter(dog => dog.details.status === "Available")}
@@ -53,16 +64,6 @@ class AvailableDogs extends Component {
 					renderItem={renderAvailableDogsItem}
 					keyExtractor={item => item.id.toString()}
 				/>
-
-				{/* only display button to admin users */}
-				<View>
-					<Button
-						title={'Add New Dog'}
-						buttonStyle={styles.addDogButton}
-						titleStyle={styles.addDogButtonText}
-						onPress={() => navigate('NewDog')}
-					/>
-				</View>
 			</ScrollView>
 		);
 	}
@@ -85,6 +86,13 @@ const styles = StyleSheet.create(
 			backgroundColor: 'rgba(0, 0, 0, 0.4)',
 			lineHeight: 50,
 			width: '120%',
+		},
+		buttonRow: {
+			justifyContent: 'center',
+			flex: 1,
+			flexDirection: 'row',
+			marginLeft: 20,
+			marginTop: 20
 		},
 		addDogButton: {
 			width: 250,

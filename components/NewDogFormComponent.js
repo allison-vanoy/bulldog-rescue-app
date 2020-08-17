@@ -42,12 +42,14 @@ class NewDog extends Component {
 				<View style={styles.labelRow}>
 					<Text style={styles.formLabel}>Dog Name</Text>
 				</View>
-				<View style={styles.inputRow}>
-					<Input
-						placeholder='dog name'
-						onChangeText={value => this.setState({dogName: value})}
-						value={this.state.dogName}
-					/>
+				<View style={styles.labelRow}>
+					<Picker
+						style={{flex: 2, height: 20, marginLeft: 10}}
+						selectedValue={this.state.dogName}
+						onValueChange={value => this.setState({dogName: value})}>
+						<Picker.Item label='George' value='George' />
+						<Picker.Item label='Marshmallow' value='Marshmallow' />
+					</Picker>
 				</View>
 
 				<View style={styles.labelRow}>
@@ -57,7 +59,7 @@ class NewDog extends Component {
 					<Picker
 						style={{flex: 2, height: 20, marginLeft: 10}}
 						selectedValue={this.state.details.status}
-						onValueChange={value => this.setState({details: {status: value}})}>
+						onValueChange={value => this.setState({...this.state, details: {...this.state.details, status: value}})}> 
 						<Picker.Item label='Available' value='Available' />
 						<Picker.Item label='On Hold' value='On Hold' />
 					</Picker>
@@ -69,7 +71,7 @@ class NewDog extends Component {
 				<View style={styles.inputRow}>
 					<Input
 						placeholder='weight'
-						onChangeText={value => this.setState({details: {weight: value}})}
+						onChangeText={value => this.setState({...this.state, details: {...this.state.details, weight: value}})}
 						value={this.state.details.weight}
 					/>
 				</View>
@@ -80,7 +82,7 @@ class NewDog extends Component {
 				<View style={styles.inputRow}>
 					<Input
 						placeholder='age'
-						onChangeText={value => this.setState({details: {age: value}})}
+						onChangeText={value => this.setState({...this.state, details: {...this.state.details, age: value}})}
 						value={this.state.details.age}
 					/>
 				</View>
@@ -88,12 +90,14 @@ class NewDog extends Component {
 				<View style={styles.labelRow}>
 					<Text style={styles.formLabel}>Gender</Text>
 				</View>
-				<View style={styles.inputRow}>
-					<Input
-						placeholder='gender'
-						onChangeText={value => this.setState({details: {gender: value}})}
-						value={this.state.details.gender}
-					/>
+				<View style={styles.labelRow}>
+					<Picker
+						style={{flex: 2, height: 20, marginLeft: 10}}
+						selectedValue={this.state.details.gender}
+						onValueChange={value => this.setState({...this.state, details: {...this.state.details, gender: value}})}>
+						<Picker.Item label='Male' value='Male' />
+						<Picker.Item label='Female' value='Female' />
+					</Picker>
 				</View>
 				
 				<View style={styles.labelRow}>
@@ -102,8 +106,10 @@ class NewDog extends Component {
 				<View style={styles.inputRow}>
 					<Input
 						placeholder='about'
-						onChangeText={value => this.setState({details: {about: value}})}
+						onChangeText={value => this.setState({...this.state, details: {...this.state.details, about: value}})}
 						value={this.state.details.about}
+						multiline={true}
+						numberOfLines={2}
 					/>
 				</View>
 				<View style={styles.labelRow}>
