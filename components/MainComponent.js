@@ -3,9 +3,10 @@ import Home from './HomeComponent';
 import AvailableDogs from './AvailableDogsComponent';
 import DogInfo from './DogInfoComponent';
 import Application from './ApplicationComponent';
+import NewDog from './NewDogFormComponent';
 import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
-import { Icon, registerCustomIconType } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchDogs } from '../redux/ActionCreators';
 
@@ -45,6 +46,7 @@ const AvailableDogsNavigator = createStackNavigator(
 				backgroundColor: 'white'
 			}
 		},
+		NewDog: { screen: NewDog },
 		DogInfo: { screen: DogInfo },
 		Application: { screen: Application }
 	},

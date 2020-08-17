@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, FlatList, StyleSheet, ScrollView } from 'react-native';
-import { Tile } from 'react-native-elements';
+import { Text, FlatList, StyleSheet, ScrollView, View } from 'react-native';
+import { Tile, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
@@ -53,6 +53,16 @@ class AvailableDogs extends Component {
 					renderItem={renderAvailableDogsItem}
 					keyExtractor={item => item.id.toString()}
 				/>
+
+				{/* only display button to admin users */}
+				<View>
+					<Button
+						title={'Add New Dog'}
+						buttonStyle={styles.addDogButton}
+						titleStyle={styles.addDogButtonText}
+						onPress={() => navigate('NewDog')}
+					/>
+				</View>
 			</ScrollView>
 		);
 	}
@@ -75,7 +85,22 @@ const styles = StyleSheet.create(
 			backgroundColor: 'rgba(0, 0, 0, 0.4)',
 			lineHeight: 50,
 			width: '120%',
-		}
+		},
+		addDogButton: {
+			width: 250,
+			height: 35,
+			backgroundColor: '#F9B5AC',
+			borderWidth: 1,
+			borderColor: '#F9B5AC',
+			borderRadius: 25,
+		},
+		addDogButtonText: {
+			fontSize: 18,
+			fontFamily: 'Roboto',
+			textShadowColor: 'rgba(235, 87, 87, 0.5)',
+			textShadowOffset: {width: 1, height: 2},
+			textShadowRadius: 1
+		},
 	}
 )
 
