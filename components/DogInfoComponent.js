@@ -29,7 +29,11 @@ function RenderDog(props) {
 
 				{/* large primary image container */}
 				<Tile
-					imageSrc={ props.currentImage === '' ? {uri: baseUrl + dog.images[0]} : {uri: baseUrl + props.currentImage}}
+					imageSrc={ props.currentImage === '' && !dog.images[0].includes('file:/') ? {uri: baseUrl + dog.images[0]} : 
+								props.currentImage !== '' && !props.currentImage.includes('file:/') ? {uri: baseUrl + props.currentImage} : 
+								props.currentImage === '' ? {uri: dog.images[0]} :
+								{uri: props.currentImage}
+							}
 				/>
 
 				{/* thumbnail images container */}
@@ -42,7 +46,8 @@ function RenderDog(props) {
 								<TouchableHighlight onPress={() => props.setImage(item)}>
 									<Image
 										style={styles.thumbnailImages}
-										source={{uri: baseUrl + item}}
+										// source={{uri: baseUrl + item}}
+										source={item.includes('file:/') ? {uri: item} : {uri: baseUrl + item}}
 									/>
 								</TouchableHighlight>
 							</View>

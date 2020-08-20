@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Modal } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Modal, CameraRoll, Image } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postDog } from '../redux/ActionCreators';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const mapStateToProps = state => {
 	return {
@@ -22,6 +25,7 @@ class NewDog extends Component {
 
 		this.state = {
 			dogName: '',
+			images: [],
 			details: {
 				status: '',
 				weight: '',
@@ -34,12 +38,13 @@ class NewDog extends Component {
 
 	handleSubmit() {
 		console.log(JSON.stringify(this.state));
-		this.props.postDog(this.state.dogName, this.state.details.status, this.state.details.weight, this.state.details.age, this.state.details.gender, this.state.details.about);
+		this.props.postDog(this.state.dogName, this.state.images, this.state.details.status, this.state.details.weight, this.state.details.age, this.state.details.gender, this.state.details.about);
 	}
 
 	resetForm() {
 		this.setState({
 			dogName: '',
+			images: [],
 			details: {
 				status: '',
 				weight: '',
@@ -50,8 +55,56 @@ class NewDog extends Component {
 		});
 	}
 
+	// add photos
+	getImageFromCamera = async () => {
+		const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+		const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+		if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
+			const capturedImage = await ImagePicker.launchCameraAsync({
+				allowsEditing: true,
+				aspect: [1, 1]
+			});
+			if (!capturedImage.cancelled) {
+				console.log('camera image location', capturedImage.uri);
+				CameraRoll.saveToCameraRoll(capturedImage.uri);
+				this.processImage(capturedImage.uri);
+			}
+		}
+	}
+
+	getImageFromGallery = async () => {
+		const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+		if (cameraRollPermission.status === 'granted') {
+			const capturedImage = await ImagePicker.launchImageLibraryAsync({
+				allowsEditing: true,
+				aspect: [1, 1]
+			});
+			if (!capturedImage.cancelled) {
+				console.log('gallery image location', capturedImage.uri);
+				this.processImage(capturedImage.uri);
+			}
+		}
+	}
+
+	processImage = async (imgUri) => {
+		console.log('PROCESS IMAGE ENTERED')
+		const processedImage = await ImageManipulator.manipulateAsync(
+			imgUri,
+			[{ resize: { width: 400} }],
+			{ format: ImageManipulator.SaveFormat.JPEG }
+		);
+		console.log('processed image location', processedImage.uri);
+		const dupState = {...this.state};
+		dupState.images.push(processedImage.uri);
+		this.setState(dupState);
+		console.log('state from processed image', dupState);
+	}
+	// end adding photos
+
+
 	render() {
-		const { dog } = this.props;
 		const { navigate } = this.props.navigation;
 
 		return(
@@ -127,6 +180,24 @@ class NewDog extends Component {
 						numberOfLines={2}
 					/>
 				</View>
+				<View>
+					<Button
+						title='Add Photo From Camera'
+						onPress={this.getImageFromCamera}
+						buttonStyle={styles.submitButton}
+						titleStyle={styles.submitButtonText}
+					/>
+					<Button
+						title='Add Photo From Gallery'
+						onPress={this.getImageFromGallery}
+						buttonStyle={styles.submitButton}
+						titleStyle={styles.submitButtonText}
+					/>
+				</View>
+				<Image
+					style={styles.thumbnailImages}
+					source={{uri: this.state.images[0]}}
+				/>
 				<View style={styles.labelRow}>
 					<Button
 						onPress={() => {
@@ -134,7 +205,7 @@ class NewDog extends Component {
 							this.resetForm();
 							navigate('AvailableDogs')
 						}}
-						title='Submit Application'
+						title='Save New Dog'
 						buttonStyle={styles.submitButton}
 						titleStyle={styles.submitButtonText}
 					/>
@@ -190,6 +261,10 @@ const styles = StyleSheet.create({
 		textShadowColor: 'rgba(235, 87, 87, 0.5)',
 		textShadowOffset: {width: 1, height: 2},
 		textShadowRadius: 1
+	},
+	thumbnailImages: {
+		width: 85,
+		height: 85,
 	},
 });
 

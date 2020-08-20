@@ -39,13 +39,10 @@ export const addDogs = dogs => ({
 	payload: dogs
 });
 
-
-
-
-
-export const postDog = (name, status, weight, age, gender, about) => dispatch => {
+export const postDog = (name, images, status, weight, age, gender, about) => dispatch => {
 	const newDog = {
 		name,
+		images,
 		details: {
 			status,
 			weight,
@@ -85,11 +82,6 @@ export const addDog = dog => ({
 	type: ActionTypes.ADD_DOG,
 	payload: dog
 });
-
-
-
-
-
 
 export const postFavorite = dogId => dispatch => {
 	dispatch(addFavorite(dogId));

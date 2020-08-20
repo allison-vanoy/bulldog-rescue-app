@@ -22,7 +22,8 @@ class AvailableDogs extends Component {
 					titleStyle={styles.dogTitle}
 					featured
 					onPress={() => navigate('DogInfo', { dogId: item.id })}
-					imageSrc={{uri: baseUrl + item.images[0]}}
+					// image types only split out for testing/dev
+					imageSrc={item.images[0].includes('file:/') ? {uri: item.images[0]} : {uri: baseUrl + item.images[0]}}
 				/>
 			)
 		};
