@@ -83,6 +83,15 @@ export const addDog = dog => ({
 	payload: dog
 });
 
+export const postToAvailable = dogId => dispatch => {
+	dispatch(addAvailable(dogId));
+};
+
+export const addAvailable = dogId => ({
+	type: ActionTypes.ADD_AVAILABLE,
+	payload: dogId
+});
+
 export const postFavorite = dogId => dispatch => {
 	dispatch(addFavorite(dogId));
 };

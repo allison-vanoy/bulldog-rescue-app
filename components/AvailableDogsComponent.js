@@ -5,6 +5,7 @@ import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
+import { postToAvailable } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
 	return {
@@ -12,15 +13,19 @@ const mapStateToProps = state => {
 	};
 };
 
+const mapDispatchToProps = {
+	postToAvailable
+};
+
 class AvailableDogs extends Component {
 
-	moveToAvailable(dogObj) {
-		console.log(JSON.stringify(dogObj));
+	moveToAvailable(dogId) {
+		this.props.postToAvailable(dogId);
 	}
 
 	render() {
 		const { navigate } = this.props.navigation;
-		let currentlySwipedDog = {};
+		let currentlySwipedDog = 0;
 
 		const adminBtns = [
 			{
@@ -54,7 +59,7 @@ class AvailableDogs extends Component {
 		const renderAvailableDogsItem = ({item}) => {
 			//if user is admin use adminBtns : use defaultBtns
 			return (
-				<Swipeout right={adminBtns} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item)}>
+				<Swipeout right={adminBtns} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item.id)}>
 					<Tile
 						title={item.name}
 						titleStyle={styles.dogTitle}
@@ -66,16 +71,6 @@ class AvailableDogs extends Component {
 					/>
 				</Swipeout>
 			)
-			// return (
-			// 	<Tile
-			// 		title={item.name}
-			// 		titleStyle={styles.dogTitle}
-			// 		featured
-			// 		onPress={() => navigate('DogInfo', { dogId: item.id })}
-			// 		// image types only split out for testing/dev
-			// 		imageSrc={item.images[0].includes('file:/') ? {uri: item.images[0]} : {uri: baseUrl + item.images[0]}}
-			// 	/>
-			// )
 		};
 
 		if (this.props.dogs.isLoading) {
@@ -182,4 +177,4 @@ const styles = StyleSheet.create(
 	}
 )
 
-export default connect(mapStateToProps)(AvailableDogs);
+export default connect(mapStateToProps, mapDispatchToProps)(AvailableDogs);
