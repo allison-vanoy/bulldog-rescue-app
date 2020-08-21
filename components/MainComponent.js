@@ -48,7 +48,6 @@ const AvailableDogsNavigator = createStackNavigator(
 		},
 		NewDog: { screen: NewDog },
 		DogInfo: { screen: DogInfo },
-		Application: { screen: Application }
 	},
 	{
 		initialRoute: 'AvailableDogs',
@@ -77,7 +76,7 @@ const AvailableDogsNavigator = createStackNavigator(
 
 const ApplicationNavigator = createStackNavigator(
 	{
-		Contact: { screen: Application }
+		Application: { screen: Application }
 	},
 	{
 		navigationOptions: ({navigation}) => ({
