@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Modal, CameraRoll, Image } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Modal, CameraRoll, Image, FlatList } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -89,17 +89,15 @@ class NewDog extends Component {
 	}
 
 	processImage = async (imgUri) => {
-		console.log('PROCESS IMAGE ENTERED')
 		const processedImage = await ImageManipulator.manipulateAsync(
 			imgUri,
 			[{ resize: { width: 400} }],
 			{ format: ImageManipulator.SaveFormat.JPEG }
 		);
-		console.log('processed image location', processedImage.uri);
+
 		const dupState = {...this.state};
 		dupState.images.push(processedImage.uri);
 		this.setState(dupState);
-		console.log('state from processed image', dupState);
 	}
 	// end adding photos
 
@@ -127,7 +125,8 @@ class NewDog extends Component {
 					<Picker
 						style={{flex: 2, height: 20, marginLeft: 10}}
 						selectedValue={this.state.details.status}
-						onValueChange={value => this.setState({...this.state, details: {...this.state.details, status: value}})}> 
+						onValueChange={value => value !== 'default' ? this.setState({...this.state, details: {...this.state.details, status: value}}) : null}> 
+						<Picker.Item label='select one...' value='default' />
 						<Picker.Item label='Available' value='Available' />
 						<Picker.Item label='On Hold' value='On Hold' />
 					</Picker>
@@ -162,7 +161,8 @@ class NewDog extends Component {
 					<Picker
 						style={{flex: 2, height: 20, marginLeft: 10}}
 						selectedValue={this.state.details.gender}
-						onValueChange={value => this.setState({...this.state, details: {...this.state.details, gender: value}})}>
+						onValueChange={value => value !== 'default' ? this.setState({...this.state, details: {...this.state.details, gender: value}}) : null}>
+						<Picker.Item label='select gender...' value='default' />
 						<Picker.Item label='Male' value='Male' />
 						<Picker.Item label='Female' value='Female' />
 					</Picker>
@@ -180,24 +180,34 @@ class NewDog extends Component {
 						numberOfLines={2}
 					/>
 				</View>
-				<View>
+				<View style={styles.labelRow}>
 					<Button
 						title='Add Photo From Camera'
 						onPress={this.getImageFromCamera}
-						buttonStyle={styles.submitButton}
-						titleStyle={styles.submitButtonText}
+						buttonStyle={styles.addCameraImageButton}
+						titleStyle={styles.addImageButtonText}
 					/>
+				</View>
+				<View style={styles.labelRow}>
 					<Button
 						title='Add Photo From Gallery'
 						onPress={this.getImageFromGallery}
-						buttonStyle={styles.submitButton}
-						titleStyle={styles.submitButtonText}
+						buttonStyle={styles.addGalleryImageButton}
+						titleStyle={styles.addImageButtonText}
 					/>
 				</View>
-				<Image
-					style={styles.thumbnailImages}
-					source={{uri: this.state.images[0]}}
-				/>
+				<View style={styles.labelRow}>
+					{
+						this.state.images.map(image => {
+							return (
+								<Image
+									style={this.state.images.length === 0 ? {height: 0} : styles.thumbnailImages}
+									source={{uri: image}}
+								/>
+							)
+						})
+					}
+				</View>
 				<View style={styles.labelRow}>
 					<Button
 						onPress={() => {
@@ -247,18 +257,43 @@ const styles = StyleSheet.create({
 		marginBottom: 20
 	},
 	submitButton: {
-		width: 250,
+		width: 350,
 		height: 35,
 		backgroundColor: '#F9B5AC',
 		borderWidth: 1,
 		borderColor: '#F9B5AC',
 		borderRadius: 25,
-		marginTop: 20
+		marginTop: 20,
+		marginBottom: 40
 	},
 	submitButtonText: {
 		fontSize: 18,
 		fontFamily: 'Roboto',
 		textShadowColor: 'rgba(235, 87, 87, 0.5)',
+		textShadowOffset: {width: 1, height: 2},
+		textShadowRadius: 1
+	},
+	addCameraImageButton: {
+		width: 250,
+		height: 35,
+		backgroundColor: '#D0D6B5',
+		borderWidth: 1,
+		borderColor: '#D0D6B5',
+		borderRadius: 25,
+		marginTop: 20
+	},
+	addGalleryImageButton: {
+		width: 250,
+		height: 35,
+		backgroundColor: '#D0D6B5',
+		borderWidth: 1,
+		borderColor: '#D0D6B5',
+		borderRadius: 25,
+	},
+	addImageButtonText: {
+		fontSize: 18,
+		fontFamily: 'Roboto',
+		textShadowColor: 'rgba(109, 112, 95, 0.5)',
 		textShadowOffset: {width: 1, height: 2},
 		textShadowRadius: 1
 	},
