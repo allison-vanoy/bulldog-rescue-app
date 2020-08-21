@@ -73,6 +73,7 @@ class Application extends Component {
 						placeholder='phone number'
 						onChangeText={value => this.setState({phone: value})}
 						value={this.state.phone}
+						keyboardType='phone-pad'
 					/>
 				</View>
 				
