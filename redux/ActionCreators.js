@@ -83,13 +83,44 @@ export const addDog = dog => ({
 	payload: dog
 });
 
-export const postToAvailable = dogId => dispatch => {
-	dispatch(addAvailable(dogId));
+export const postToAvailable = dog => dispatch => {
+	const availableDog = {
+		status: "Available",
+		weight: dog.details.weight,
+		age: dog.details.age,
+		gender: dog.details.gender,
+		about: dog.details.about
+	}
+
+	return fetch(baseUrl + 'dogs/' + dog.id, {
+			method: "PATCH",
+			body: JSON.stringify({details: availableDog}),
+			headers: {
+				"Content-type": "application/json"
+			}
+		})
+		.then(response => {
+			if (response.ok) {
+				return response;
+			} else {
+				const error = new Error(`Error ${response.status}: ${response.statusText}`);
+				error.response = response;
+				throw error;
+			}
+		},
+		error => { throw error; }
+	)
+	.then(response => response.json())
+	.then(response => dispatch(addAvailable(response)))
+	.catch(error => {
+		console.log('post to available', error.message);
+		alert(`This dog could not be moved to available\nError: ${error.message}`);
+	})
 };
 
-export const addAvailable = dogId => ({
+export const addAvailable = dog => ({
 	type: ActionTypes.ADD_AVAILABLE,
-	payload: dogId
+	payload: dog
 });
 
 export const postFavorite = dogId => dispatch => {

@@ -19,13 +19,13 @@ const mapDispatchToProps = {
 
 class AvailableDogs extends Component {
 
-	moveToAvailable(dogId) {
-		this.props.postToAvailable(dogId);
+	moveToAvailable(dogToMove) {
+		this.props.postToAvailable(dogToMove);
 	}
 
 	render() {
 		const { navigate } = this.props.navigation;
-		let currentlySwipedDog = 0;
+		let currentlySwipedDog = {};
 
 		const adminBtns = [
 			{
@@ -59,7 +59,7 @@ class AvailableDogs extends Component {
 		const renderAvailableDogsItem = ({item}) => {
 			//if user is admin use adminBtns : use defaultBtns
 			return (
-				<Swipeout right={adminBtns} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item.id)}>
+				<Swipeout right={adminBtns} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item)}>
 					<Tile
 						title={item.name}
 						titleStyle={styles.dogTitle}

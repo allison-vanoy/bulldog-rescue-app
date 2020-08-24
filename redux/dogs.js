@@ -16,10 +16,10 @@ export const dogs = (state = { isLoading: true, errMess: null, dogs: [] }, actio
 			return {...state, dogs: state.dogs.concat(action.payload)}
 
 		case ActionTypes.ADD_AVAILABLE:
-			const key = action.payload;
+			const key = action.payload.id;
 			const dogIndex = state.dogs.findIndex(dog => dog.id === key);
 			const currentDogs = state.dogs;
-			currentDogs[dogIndex].details.status = 'Available';
+			currentDogs[dogIndex].details.status = "Available";
 			return {...state, dogs: currentDogs}
 
 		default:
