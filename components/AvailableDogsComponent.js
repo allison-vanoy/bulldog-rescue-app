@@ -98,14 +98,18 @@ class AvailableDogs extends Component {
 					/>
 				</View>
 
-				<Text style={styles.pageHeader}>Available Dogs</Text>
+				{
+					this.props.dogs.dogs.filter(dog => dog.details.status === "Available").length > 0 ? <Text style={styles.pageHeader}>Available Dogs</Text> : null
+				}
 				<FlatList
 					data={this.props.dogs.dogs.filter(dog => dog.details.status === "Available")}
 					renderItem={renderAvailableDogsItem}
 					keyExtractor={item => item.id.toString()}
 				/>
 
-				<Text style={styles.pageHeader}>On Hold</Text>
+				{
+					this.props.dogs.dogs.filter(dog => dog.details.status === "On Hold").length > 0 ? <Text style={styles.pageHeader}>On Hold</Text> : null
+				}
 				<FlatList
 					data={this.props.dogs.dogs.filter(dog => dog.details.status === "On Hold")}
 					renderItem={renderAvailableDogsItem}
@@ -123,7 +127,8 @@ const styles = StyleSheet.create(
 			fontSize: 22,
 			fontFamily: 'Roboto',
 			fontWeight: '100',
-			lineHeight: 50
+			lineHeight: 50,
+			marginTop: 15
 		},
 		dogTitle: {
 			fontFamily: 'sans-serif-condensed',
