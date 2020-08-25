@@ -5,7 +5,7 @@ import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
-import { postToAvailable, postToPending, postToHold } from '../redux/ActionCreators';
+import { postToAvailable, postToPending, postToHold, postFavorite } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
 	return {
@@ -16,7 +16,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
 	postToAvailable,
 	postToPending,
-	postToHold
+	postToHold,
+	postFavorite
 };
 
 class AvailableDogs extends Component {
@@ -33,11 +34,17 @@ class AvailableDogs extends Component {
 		this.props.postToHold(dogToMove);
 	}
 
+	markFavorite(dogId) {
+		this.props.postFavorite(dogId);
+	}
+
 	render() {
 		const { navigate } = this.props.navigation;
 		let currentlySwipedDog = {};
 
-		//admin swipe buttons
+		//////////////////////
+		//admin user - swipe buttons
+		//////////////////////
 		const onHoldBtns = [
 			{
 				component: (
@@ -108,13 +115,65 @@ class AvailableDogs extends Component {
 		]
 		//end admin swipe buttons
 
-		//standard user swipe buttons
+		//////////////////////
+		//standard user - swipe buttons
+		//////////////////////
+		// const onHoldBtns = [
+		// 	{
+		// 		component: (
+		// 			<ScrollView style={{height: 300}}>
+		// 				<View 
+		// 					style={{
+		// 						backgroundColor: '#75B9BE', height: 300, justifyContent: 'center'
+		// 					}}
+		// 				>
+		// 					<TouchableOpacity onPress={() => this.markFavorite(currentlySwipedDog)}>
+		// 						<Text style={[styles.btnText, styles.bottomSwipeBtn]}>
+		// 							Add to Favorites
+		// 						</Text>
+		// 					</TouchableOpacity>
+		// 				</View>
+		// 			</ScrollView>
+		// 		)
+		// 	}
+		// ]
+
+		// const availableBtns = [
+		// 	{
+		// 		component: (
+		// 			<ScrollView style={{height: 300}}>
+		// 				<View 
+		// 					style={{
+		// 						backgroundColor: '#F9B5AC', height: 150, justifyContent: 'center'
+		// 					}}
+		// 				>
+		// 					<TouchableOpacity onPress={() => navigate('Application')}>
+		// 						<Text style={[styles.btnText, styles.topSwipeBtn]}>
+		// 							Apply to Adopt
+		// 						</Text>
+		// 					</TouchableOpacity>
+		// 				</View>
+		// 				<View 
+		// 					style={{
+		// 						backgroundColor: '#75B9BE', height: 150, justifyContent: 'center'
+		// 					}}
+		// 				>
+		// 					<TouchableOpacity onPress={() => markFavorite(currentlySwipedDog)}>
+		// 						<Text style={[styles.btnText, styles.bottomSwipeBtn]}>
+		// 							Add to Favorites
+		// 						</Text>
+		// 					</TouchableOpacity>
+		// 				</View>
+		// 			</ScrollView>
+		// 		)
+		// 	}
+		// ]
 		//end standard user swipe buttons
 
 		const renderAvailableDogsItem = ({item}) => {
 			//if user is admin use adminBtns : use defaultBtns
 			return (
-				<Swipeout right={item.details.status == "On Hold" ? onHoldBtns : availableBtns} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item)}>
+				<Swipeout right={item.details.status == "On Hold" ? onHoldBtns : item.details.status == "Available" ?  availableBtns : null} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item)}>
 					<Tile
 						title={item.name}
 						titleStyle={styles.dogTitle}
@@ -167,6 +226,15 @@ class AvailableDogs extends Component {
 				}
 				<FlatList
 					data={this.props.dogs.dogs.filter(dog => dog.details.status === "On Hold")}
+					renderItem={renderAvailableDogsItem}
+					keyExtractor={item => item.id.toString()}
+				/>
+
+				{
+					this.props.dogs.dogs.filter(dog => dog.details.status === "Pending Adoption").length > 0 ? <Text style={styles.pageHeader}>Pending Adoptions</Text> : null
+				}
+				<FlatList
+					data={this.props.dogs.dogs.filter(dog => dog.details.status === "Pending Adoption")}
 					renderItem={renderAvailableDogsItem}
 					keyExtractor={item => item.id.toString()}
 				/>
