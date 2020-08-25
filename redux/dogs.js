@@ -16,12 +16,26 @@ export const dogs = (state = { isLoading: true, errMess: null, dogs: [] }, actio
 			return {...state, dogs: state.dogs.concat(action.payload)}
 
 		case ActionTypes.ADD_AVAILABLE:
-			const key = action.payload.id;
-			const dogIndex = state.dogs.findIndex(dog => dog.id === key);
-			const currentDogs = state.dogs;
-			currentDogs[dogIndex].details.status = "Available";
-			return {...state, dogs: currentDogs}
+			const availKey = action.payload.id;
+			const availIndex = state.dogs.findIndex(dog => dog.id === availKey);
+			const currentDogsAvail = state.dogs;
+			currentDogsAvail[availIndex].details.status = "Available";
+			return {...state, dogs: currentDogsAvail}
 
+		case ActionTypes.ADD_PENDING:
+			const pendingKey = action.payload.id;
+			const pendingIndex = state.dogs.findIndex(dog => dog.id === pendingKey);
+			const currentDogsPending = state.dogs;
+			currentDogsPending[pendingIndex].details.status = "Pending Adoption";
+			return {...state, dogs: currentDogsPending}
+	
+		case ActionTypes.ADD_ON_HOLD:
+			const holdKey = action.payload.id;
+			const holdIndex = state.dogs.findIndex(dog => dog.id === holdKey);
+			const currentDogsHold = state.dogs;
+			currentDogsHold[holdIndex].details.status = "On Hold";
+			return {...state, dogs: currentDogsHold}
+		
 		default:
 			return state;
 	}

@@ -123,6 +123,86 @@ export const addAvailable = dog => ({
 	payload: dog
 });
 
+export const postToPending = dog => dispatch => {
+	const availableDog = {
+		status: "Pending Adoption",
+		weight: dog.details.weight,
+		age: dog.details.age,
+		gender: dog.details.gender,
+		about: dog.details.about
+	}
+
+	return fetch(baseUrl + 'dogs/' + dog.id, {
+			method: "PATCH",
+			body: JSON.stringify({details: availableDog}),
+			headers: {
+				"Content-type": "application/json"
+			}
+		})
+		.then(response => {
+			if (response.ok) {
+				return response;
+			} else {
+				const error = new Error(`Error ${response.status}: ${response.statusText}`);
+				error.response = response;
+				throw error;
+			}
+		},
+		error => { throw error; }
+	)
+	.then(response => response.json())
+	.then(response => dispatch(addPending(response)))
+	.catch(error => {
+		console.log('post to available', error.message);
+		alert(`This dog could not be moved to available\nError: ${error.message}`);
+	})
+};
+
+export const addPending = dog => ({
+	type: ActionTypes.ADD_PENDING,
+	payload: dog
+});
+
+export const postToHold = dog => dispatch => {
+	const availableDog = {
+		status: "On Hold",
+		weight: dog.details.weight,
+		age: dog.details.age,
+		gender: dog.details.gender,
+		about: dog.details.about
+	}
+
+	return fetch(baseUrl + 'dogs/' + dog.id, {
+			method: "PATCH",
+			body: JSON.stringify({details: availableDog}),
+			headers: {
+				"Content-type": "application/json"
+			}
+		})
+		.then(response => {
+			if (response.ok) {
+				return response;
+			} else {
+				const error = new Error(`Error ${response.status}: ${response.statusText}`);
+				error.response = response;
+				throw error;
+			}
+		},
+		error => { throw error; }
+	)
+	.then(response => response.json())
+	.then(response => dispatch(addOnHold(response)))
+	.catch(error => {
+		console.log('post to available', error.message);
+		alert(`This dog could not be moved to available\nError: ${error.message}`);
+	})
+};
+
+export const addOnHold = dog => ({
+	type: ActionTypes.ADD_ON_HOLD,
+	payload: dog
+});
+
 export const postFavorite = dogId => dispatch => {
 	dispatch(addFavorite(dogId));
 };

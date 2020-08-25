@@ -5,7 +5,7 @@ import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
-import { postToAvailable } from '../redux/ActionCreators';
+import { postToAvailable, postToPending, postToHold } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
 	return {
@@ -14,7 +14,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-	postToAvailable
+	postToAvailable,
+	postToPending,
+	postToHold
 };
 
 class AvailableDogs extends Component {
@@ -23,11 +25,20 @@ class AvailableDogs extends Component {
 		this.props.postToAvailable(dogToMove);
 	}
 
+	moveToPending(dogToMove) {
+		this.props.postToPending(dogToMove);
+	}
+
+	moveToHold(dogToMove) {
+		this.props.postToHold(dogToMove);
+	}
+
 	render() {
 		const { navigate } = this.props.navigation;
 		let currentlySwipedDog = {};
 
-		const adminBtns = [
+		//admin swipe buttons
+		const onHoldBtns = [
 			{
 				component: (
 					<ScrollView style={{height: 300}}>
@@ -37,7 +48,7 @@ class AvailableDogs extends Component {
 							}}
 						>
 							<TouchableOpacity onPress={() => this.moveToAvailable(currentlySwipedDog)}>
-								<Text style={styles.topSwipeBtn}>
+								<Text style={[styles.btnText, styles.topSwipeBtn]}>
 									Move to Available
 								</Text>
 							</TouchableOpacity>
@@ -47,7 +58,7 @@ class AvailableDogs extends Component {
 								backgroundColor: '#75B9BE', height: 150, justifyContent: 'center'
 							}}
 						>
-							<Text style={styles.bottomSwipeBtn}>
+							<Text style={[styles.btnText, styles.bottomSwipeBtn]}>
 								Update
 							</Text>
 						</View>
@@ -56,10 +67,54 @@ class AvailableDogs extends Component {
 			}
 		]
 
+		const availableBtns = [
+			{
+				component: (
+					<ScrollView style={{height: 300}}>
+						<View 
+							style={{
+								backgroundColor: '#F9B5AC', height: 100, justifyContent: 'center'
+							}}
+						>
+							<TouchableOpacity onPress={() => this.moveToPending(currentlySwipedDog)}>
+								<Text style={[styles.btnText, styles.topSwipeBtn]}>
+									Move to Pending Adoption
+								</Text>
+							</TouchableOpacity>
+						</View>
+						<View 
+							style={{
+								backgroundColor: '#D0D6B5', height: 100, justifyContent: 'center'
+							}}
+						>
+							<TouchableOpacity onPress={() => this.moveToHold(currentlySwipedDog)}>
+								<Text style={[styles.btnText, styles.middleSwipeBtn]}>
+									Return to On Hold
+								</Text>
+							</TouchableOpacity>
+						</View>
+						<View 
+							style={{
+								backgroundColor: '#75B9BE', height: 100, justifyContent: 'center'
+							}}
+						>
+							<Text style={[styles.btnText, styles.bottomSwipeBtn]}>
+								Update
+							</Text>
+						</View>
+					</ScrollView>
+				)
+			}
+		]
+		//end admin swipe buttons
+
+		//standard user swipe buttons
+		//end standard user swipe buttons
+
 		const renderAvailableDogsItem = ({item}) => {
 			//if user is admin use adminBtns : use defaultBtns
 			return (
-				<Swipeout right={adminBtns} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item)}>
+				<Swipeout right={item.details.status == "On Hold" ? onHoldBtns : availableBtns} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item)}>
 					<Tile
 						title={item.name}
 						titleStyle={styles.dogTitle}
@@ -161,23 +216,22 @@ const styles = StyleSheet.create(
 			textShadowOffset: {width: 1, height: 2},
 			textShadowRadius: 1
 		},
-		topSwipeBtn: {
+		btnText: {
 			fontSize: 18,
 			textAlign: 'center',
 			color: '#FFFFFF',
 			fontFamily: 'sans-serif-condensed',
-			textShadowColor: 'rgba(235, 87, 87, 0.5)',
 			textShadowOffset: {width: 1, height: 2},
 			textShadowRadius: 1
 		},
+		topSwipeBtn: {
+			textShadowColor: 'rgba(235, 87, 87, 0.5)',
+		},
+		middleSwipeBtn: {
+			textShadowColor: 'rgba(109, 112, 95, 0.5)',
+		},
 		bottomSwipeBtn: {
-			fontSize: 18,
-			textAlign: 'center',
-			color: '#FFFFFF',
-			fontFamily: 'sans-serif-condensed',
 			textShadowColor: 'rgba(105, 73, 88, 0.5)',
-			textShadowOffset: {width: 1, height: 2},
-			textShadowRadius: 1
 		}
 	}
 )
