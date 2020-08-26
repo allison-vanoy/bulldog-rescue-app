@@ -36,6 +36,13 @@ export const dogs = (state = { isLoading: true, errMess: null, dogs: [] }, actio
 			currentDogsHold[holdIndex].details.status = "On Hold";
 			return {...state, dogs: currentDogsHold}
 		
+		case ActionTypes.ADD_ADOPTED:
+			const adoptKey = action.payload.id;
+			const adoptIndex = state.dogs.findIndex(dog => dog.id === adoptKey);
+			const currentDogsAdopt = state.dogs;
+			currentDogsAdopt[adoptIndex].details.status = "Adopted";
+			return {...state, dogs: currentDogsAdopt}
+	
 		default:
 			return state;
 	}

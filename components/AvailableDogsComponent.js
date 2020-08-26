@@ -5,7 +5,7 @@ import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
-import { postToAvailable, postToPending, postToHold, postFavorite } from '../redux/ActionCreators';
+import { postToAvailable, postToPending, postToHold, postFavorite, postToAdopted } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
 	return {
@@ -17,7 +17,8 @@ const mapDispatchToProps = {
 	postToAvailable,
 	postToPending,
 	postToHold,
-	postFavorite
+	postFavorite,
+	postToAdopted
 };
 
 class AvailableDogs extends Component {
@@ -32,6 +33,10 @@ class AvailableDogs extends Component {
 
 	moveToHold(dogToMove) {
 		this.props.postToHold(dogToMove);
+	}
+
+	moveToAdopted(dogToMove) {
+		this.props.postToAdopted(dogToMove);
 	}
 
 	markFavorite(dogId) {
@@ -113,6 +118,26 @@ class AvailableDogs extends Component {
 				)
 			}
 		]
+
+		const pendingBtns = [
+			{
+				component: (
+					<ScrollView style={{height: 300}}>
+						<View 
+							style={{
+								backgroundColor: '#F9B5AC', height: 300, justifyContent: 'center'
+							}}
+						>
+							<TouchableOpacity onPress={() => this.moveToAdopted(currentlySwipedDog)}>
+								<Text style={[styles.btnText, styles.topSwipeBtn]}>
+									Move to Adopted
+								</Text>
+							</TouchableOpacity>
+						</View>
+					</ScrollView>
+				)
+			}
+		]
 		//end admin swipe buttons
 
 		//////////////////////
@@ -173,7 +198,7 @@ class AvailableDogs extends Component {
 		const renderAvailableDogsItem = ({item}) => {
 			//if user is admin use adminBtns : use defaultBtns
 			return (
-				<Swipeout right={item.details.status == "On Hold" ? onHoldBtns : item.details.status == "Available" ?  availableBtns : null} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item)}>
+				<Swipeout right={item.details.status == "On Hold" ? onHoldBtns : item.details.status == "Available" ?  availableBtns : item.details.status == "Pending Adoption" ? pendingBtns : null} autoClose={true} buttonWidth={100} onOpen={() => (currentlySwipedDog = item)}>
 					<Tile
 						title={item.name}
 						titleStyle={styles.dogTitle}
